@@ -1,3 +1,3 @@
-./mysql
-./minio
-./posgresql
+mysql/
+minio/
+postgresql/

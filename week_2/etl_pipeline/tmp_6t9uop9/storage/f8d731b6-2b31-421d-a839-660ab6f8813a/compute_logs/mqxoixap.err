@@ -1,0 +1,121 @@
+[32m2025-02-25 05:17:23 +0700[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - f8d731b6-2b31-421d-a839-660ab6f8813a - 173648 - LOGS_CAPTURED - Started capturing logs in process (pid: 173648).
+[32m2025-02-25 05:17:23 +0700[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - f8d731b6-2b31-421d-a839-660ab6f8813a - 173648 - olist_orders_dataset - STEP_START - Started execution of step "olist_orders_dataset".
+[32m2025-02-25 05:17:23 +0700[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - f8d731b6-2b31-421d-a839-660ab6f8813a - 173648 - olist_orders_dataset - LOADED_INPUT - Loaded input "bronze_olist_orders_dataset" using input manager "minio_io_manager", from output "result" of step "bronze__ecom__bronze_olist_orders_dataset"
+[32m2025-02-25 05:17:23 +0700[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - f8d731b6-2b31-421d-a839-660ab6f8813a - 173648 - olist_orders_dataset - STEP_INPUT - Got input "bronze_olist_orders_dataset" of type "Any". (Type check passed).
+[32m2025-02-25 05:17:23 +0700[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - f8d731b6-2b31-421d-a839-660ab6f8813a - 173648 - olist_orders_dataset - STEP_OUTPUT - Yielded output "olist_orders_dataset" of type "DataFrame". (Type check passed).
+[32m2025-02-25 05:17:23 +0700[0m - dagster - [34mERROR[0m - [31m__ASSET_JOB - f8d731b6-2b31-421d-a839-660ab6f8813a - 173648 - olist_orders_dataset - STEP_FAILURE - Execution of step "olist_orders_dataset" failed.
+
+dagster._core.errors.DagsterExecutionHandleOutputError: Error occurred while handling output "olist_orders_dataset" of step "olist_orders_dataset"::
+
+RuntimeError: Failed to insert data into public.olist_orders_dataset: (psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "admin"
+connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "admin"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+Stack Trace:
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/dagster/_core/execution/plan/utils.py", line 54, in op_execution_error_boundary
+    yield
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/dagster/_utils/__init__.py", line 490, in iterate_with_context
+    next_output = next(iterator)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/dagster/_core/execution/plan/execute_step.py", line 749, in _gen_fn
+    gen_output = output_manager.handle_output(output_context, output.value)
+  File "/home/kebinrom/FDE/week_2/etl_pipeline/resources/psql_io_manager.py", line 35, in handle_output
+    raise RuntimeError(f"Failed to insert data into {schema}.{table}: {e}")
+
+The above exception occurred during handling of the following exception:
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "admin"
+connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "admin"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+Stack Trace:
+  File "/home/kebinrom/FDE/week_2/etl_pipeline/resources/psql_io_manager.py", line 33, in handle_output
+    obj.to_sql(name=table, con=conn, schema=schema, if_exists='replace', index=False)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/pandas/core/generic.py", line 3087, in to_sql
+    return sql.to_sql(
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 841, in to_sql
+    with pandasSQL_builder(con, schema=schema, need_transaction=True) as pandas_sql:
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 906, in pandasSQL_builder
+    return SQLDatabase(con, schema, need_transaction)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 1636, in __init__
+    con = self.exit_stack.enter_context(con.connect())
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 3276, in connect
+    return self._connection_cls(self)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 148, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 2440, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 3300, in raw_connection
+    return self.pool.connect()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/impl.py", line 179, in _do_get
+    with util.safe_reraise():
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    return self._create_connection()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 900, in __connect
+    with util.safe_reraise():
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/create.py", line 643, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 620, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+
+The above exception was caused by the following exception:
+psycopg2.OperationalError: connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "admin"
+connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "admin"
+
+
+Stack Trace:
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 3300, in raw_connection
+    return self.pool.connect()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/impl.py", line 179, in _do_get
+    with util.safe_reraise():
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    return self._create_connection()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 900, in __connect
+    with util.safe_reraise():
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/create.py", line 643, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 620, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+  File "/home/kebinrom/.local/lib/python3.10/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+[0m

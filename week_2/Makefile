@@ -19,4 +19,4 @@ to_mysql:
 	docker exec -ti de_mysql mysql --local-infile=1 -u${MYSQL_USER} -p"${MYSQL_PASSWORD}" ${MYSQL_DATABASE}
 
 to_mysql_root:
-	docker exec -ti de_mysql mysql -u"root" -p"${MYSQL_ROOT_PASSWORD}" ${MYSQL_DATABASE}
+	docker exec -ti de_mysql mysql -u"root" -p"${MYSQL_PASSWORD}" ${MYSQL_DATABASE}
